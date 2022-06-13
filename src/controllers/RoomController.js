@@ -35,25 +35,25 @@ module.exports = {
     },
 
     async open(req, res) {
-        // const db = await Database()
+        const db = await Database()
         const roomId = req.params.room
-        res.render("room", {roomId: roomId})
-        // const questions = await db.all(`SELECT * FROM questions WHERE room = ${roomId} and read = 0`)
-        // const questionsRead = await db.all(`SELECT * FROM questions WHERE room = ${roomId} and read = 1`)
-    //     let isNoQuestions
+        const questions = await db.all(`SELECT * FROM questions WHERE room = ${roomId} and read = 0`)
 
-    //     if (questions.length == 0) {
-    //         if (questionsRead.length == 0) {
-    //             isNoQuestions = true
-    //         }
-    //     }
+        const questionsRead = await db.all(`SELECT * FROM questions WHERE room = ${roomId} and read = 1`)
+        let isNoQuestions
 
-    //     res.render("room", { roomId: roomId, questions: questions, questionsRead: questionsRead, isNoQuestions: isNoQuestions })
-    // },
+        if (questions.length == 0) {
+            if (questionsRead.length == 0) {
+                isNoQuestions = true
+            }
+        }
 
-    // enter(req, res) {
-    //     const roomId = req.body.roomId
+        res.render("room", { roomId: roomId, questions: questions, questionsRead: questionsRead, isNoQuestions: isNoQuestions })
+    },
 
-    //     res.redirect(`/room/${roomId}`)
-    // }
-}}
+    enter(req, res) {
+        const roomId = req.body.roomId
+
+        res.redirect(`/room/${roomId}`)
+    }
+}
